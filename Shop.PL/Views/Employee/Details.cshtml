@@ -1,0 +1,192 @@
+﻿@model EmployeeDetailsDto
+@{
+    ViewData["Tittle"] = "Employee";
+var Departments = new SelectList(@ViewData["Departments"] as IEnumerable<DepartmentDto>, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+
+}
+
+<h1>Details</h1>
+
+<div class="container mt-5">
+    <h2 class="mb-4 text-primary">Employee Details</h2>
+
+    <!-- Nav tabs with custom styling -->
+    <ul class="nav nav-tabs" role="tablist">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#general" role="tab">
+                <i class="bi bi-info-circle"></i> General
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#administration" role="tab">
+                <i class="bi bi-gear"></i> Administration
+            </a>
+        </li>
+    </ul>
+
+    <!-- Tab panes with custom padding and borders -->
+    <div class="tab-content mt-3 p-4 border rounded">
+        <!-- General Tab -->
+        <div class="tab-pane fade show active" id="general" role="tabpanel">
+            <div class="row mb-3">
+                @if (!string.IsNullOrEmpty(Model.Image))
+{
+    <div class="image-wrapper">
+        <img src="~/Fils/Iamge/@Model.Image"alt="Image" class="image-display" />
+    </div>
+}
+else
+{
+    <p>No image available.</p>
+}
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">ID:</label>
+                    <p class="form-control-plaintext">@Model.Id</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Name:</label>
+                    <p class="form-control-plaintext">@Model.Name</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Address:</label>
+                    <p class="form-control-plaintext">@Model.Address</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Salary:</label>
+                    <p class="form-control-plaintext">@String.Format("{0:C}", Model.Salary)</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Phone Number:</label>
+                    <p class="form-control-plaintext">@Model.PhoneNumber ?? "N/A"</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Email:</label>
+                    <p class="form-control-plaintext">@Model.Email</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Age:</label>
+                    <p class="form-control-plaintext">@Model.Age?.ToString() ?? "N/A"</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Hiring Date:</label>
+                    <p class="form-control-plaintext">@Model.HiringDate.ToString("yyyy-MM-dd")</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Active:</label>
+                    <p class="form-control-plaintext">@Model.IsActive</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Gender:</label>
+                    <p class="form-control-plaintext">@Model.Gender</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Employee Type:</label>
+                    <p class="form-control-plaintext">@Model.EmployeeType</p>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <label class="form-label fw-bold">Department:</label>
+                <p class="form-control-plaintext">@Model.DepartmentName</p>
+                @if (Model.DepartmentID != null)
+                {
+                    <a asp-action="Details" asp-controller="Department" asp-route-id="@Model.DepartmentID" class="btn btn-link">View Department Details</a> <!-- Link to Department Details -->
+                }
+            </div>
+        </div>
+
+
+        <!-- Administration Tab -->
+        <div class="tab-pane fade" id="administration" role="tabpanel">
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Created By:</label>
+                    <p class="form-control-plaintext">@Model.CreatedBy</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Created On:</label>
+                    <p class="form-control-plaintext">@Model.CreatedOn.ToString("g")</p>
+                </div>
+            </div>
+            <div class="row mb-3">
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Last Modified By:</label>
+                    <p class="form-control-plaintext">@Model.LastModifiedBy</p>
+                </div>
+                <div class="col-md-6">
+                    <label class="form-label fw-bold">Last Modified On:</label>
+                    <p class="form-control-plaintext">@Model.LastModifiedOn.ToString("g")</p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Buttons with spacing -->
+    <div class="mt-4">
+        <a href="@Url.Action("Edit", new { id = Model.Id })" class="btn btn-outline-primary me-2">
+            <i class="bi bi-pencil-square"></i> Edit
+        </a>
+        <a href="@Url.Action("Index")" class="btn btn-outline-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .nav-tabs .nav-link {
+        font-size: 18px;
+        padding: 10px 20px;
+        color: #0d6efd;
+    }
+
+        .nav-tabs .nav-link.active {
+            background-color: #0d6efd;
+            color: white;
+        }
+
+    .form-label {
+        font-size: 16px;
+    }
+
+    .form-control-plaintext {
+        font-size: 16px;
+        color: #495057;
+    }
+
+    .btn-outline-primary, .btn-outline-secondary {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+
+    .image-wrapper {
+    width: 300px; /* Set desired width */
+    height: auto; /* Adjust height as needed */
+    overflow: hidden; /* Hide overflow if image is larger */
+    display: flex;
+    justify-content: center; /* Center the image horizontally */
+    align-items: center; /* Center the image vertically */
+    border: 1px solid #ccc; /* Optional: add a border */
+    padding: 10px; /* Optional: add padding */
+    background-color: #f9f9f9; /* Optional: set background color */
+}
+
+.image-display {
+    max-width: 100%; /* Ensures the image fits within the div */
+    height: auto; /* Maintain aspect ratio */
+}
+
+</style>

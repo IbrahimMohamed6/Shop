@@ -1,0 +1,137 @@
+﻿@model CreateUpdateEmployeeDto
+@{
+    Layout = "_Layout";
+    var Departments = new SelectList(@ViewData["Departments"] as IEnumerable<DepartmentDto>, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+}
+<div>
+    @using (Html.BeginForm())
+    {
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="Name" class="form-label fw-bold">Name:</label>
+                @Html.TextBoxFor(m => m.Name, new { @class = "form-control", placeholder = "Enter employee name" })
+                @Html.ValidationMessageFor(m => m.Name, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label for="Address" class="form-label fw-bold">Address:</label>
+                @Html.TextBoxFor(m => m.Address, new { @class = "form-control", placeholder = "Enter address" })
+                @Html.ValidationMessageFor(m => m.Address, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="Salary" class="form-label fw-bold">Salary:</label>
+                @Html.TextBoxFor(m => m.Salary, new { @class = "form-control", placeholder = "Enter salary", @type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.Salary, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label for="PhoneNumber" class="form-label fw-bold">Phone Number:</label>
+                @Html.TextBoxFor(m => m.PhoneNumber, new { @class = "form-control", placeholder = "Enter phone number" })
+                @Html.ValidationMessageFor(m => m.PhoneNumber, "", new { @class = "text-danger" })
+            </div>
+           
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="Email" class="form-label fw-bold">Email:</label>
+                @Html.TextBoxFor(m => m.Email, new { @class = "form-control", placeholder = "Enter email", @type = "email" })
+                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "text-danger" })
+            </div>
+            <div class="col-md-6">
+                <label for="Age" class="form-label fw-bold">Age:</label>
+                @Html.TextBoxFor(m => m.Age, new { @class = "form-control", placeholder = "Enter age", @type = "number", min = "0" })
+                @Html.ValidationMessageFor(m => m.Age, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="HiringDate" class="form-label fw-bold">Hiring Date:</label>
+                @Html.TextBoxFor(m => m.HiringDate, new { @class = "form-control", @type = "date" })
+                @Html.ValidationMessageFor(m => m.HiringDate, "", new { @class = "text-danger" })
+            </div>
+            <div class="mb-3">
+                <label class="form-label fw-bold">Gender:</label><br />
+                @foreach (Gender gender in Enum.GetValues(typeof(Gender)))
+                {
+                    <div class="form-check">
+                        @Html.RadioButtonFor(m => m.Gender, gender, new { @class = "form-check-input" })
+                        <label class="form-check-label">@gender</label>
+                    </div>
+                }
+                @Html.ValidationMessageFor(m => m.Gender, "", new { @class = "text-danger" })
+            </div>
+
+        </div>
+
+        <div class="row mb-3">
+            <div class="col-md-6">
+                <label for="IsActive" class="form-label fw-bold">Is Active:</label>
+                @Html.CheckBoxFor(m => m.IsActive, new { @class = "form-check-input" })
+                @Html.ValidationMessageFor(m => m.IsActive, "", new { @class = "text-danger" })
+            </div>
+            <!-- Employee Type Input (Radio Buttons for single selection) -->
+            <div class="mb-3">
+                <label class="form-label fw-bold">Employee Type:</label><br />
+                @foreach (EmployeeType employeeType in Enum.GetValues(typeof(EmployeeType)))
+                {
+                    <div class="form-check">
+                        @Html.RadioButtonFor(m => m.EmployeeType, employeeType, new { @class = "form-check-input" })
+                        <label class="form-check-label">@employeeType</label>
+                    </div>
+                }
+                @Html.ValidationMessageFor(m => m.EmployeeType, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="DepartmentId">Department</label>
+            <select asp-for="DepartmentId" class="form-control" asp-items="@Departments">
+                <option value="@null">No Department</option> <!-- Allow null/empty selection -->
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.Image, "Upload Image")
+            <input type="file" name="ImageFile" class="form-control" />
+            @Html.ValidationMessageFor(model => model.Image)
+        </div>
+
+
+        <!-- Submit Button -->
+        <div class="mt-4">
+            <button type="submit" class="btn btn-primary me-2">
+                <i class="bi bi-save"></i> Save
+            </button>
+            <a href="@Url.Action("Index")" class="btn btn-secondary">
+                <i class="bi bi-arrow-left"></i> Back to List
+            </a>
+        </div>
+    }
+</div>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .form-label {
+        font-size: 16px;
+    }
+
+    .form-control {
+        font-size: 16px;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+</style>
+@section Scripts {
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+

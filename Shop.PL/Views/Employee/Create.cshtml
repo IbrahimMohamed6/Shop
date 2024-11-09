@@ -1,0 +1,117 @@
+﻿@model CreateUpdateEmployeeDto
+@{
+    var Departments = new SelectList(@ViewData["Departments"] as IEnumerable<DepartmentDto>, nameof(DepartmentDto.Id), nameof(DepartmentDto.Name));
+}
+<h2 class="mb-4 text-primary">Create New Employee</h2>
+
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+
+    <div class="form-group">
+        <label asp-for="Name"></label>
+        <input asp-for="Name" class="form-control" />
+        <span asp-validation-for="Name" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Address"></label>
+        <input asp-for="Address" class="form-control" />
+        <span asp-validation-for="Address" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Salary"></label>
+        <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="PhoneNumber"></label>
+        <input asp-for="PhoneNumber" class="form-control" />
+        <span asp-validation-for="PhoneNumber" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="HiringDate"></label>
+        <input asp-for="HiringDate" class="form-control" />
+        <span asp-validation-for="HiringDate" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Age"></label>
+        <input asp-for="Age" class="form-control" />
+        <span asp-validation-for="Age" class="text-danger"></span>
+    </div>
+
+
+    <div class="form-group">
+        <label asp-for="IsActive"></label>
+        <input asp-for="IsActive" type="checkbox" class="form-check-input" />
+    </div>
+
+    <div class="form-group">
+        <label asp-for="Gender"></label>
+        <select asp-for="Gender" class="form-control" asp-items="Html.GetEnumSelectList<Gender>()"></select>
+        <span asp-validation-for="Gender" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+        <label asp-for="EmployeeType"></label>
+        <select asp-for="EmployeeType" class="form-control" asp-items="Html.GetEnumSelectList<EmployeeType>()"></select>
+        <span asp-validation-for="EmployeeType" class="text-danger"></span>
+    </div>
+
+    <div class="form-group">
+            <label asp-for="DepartmentId">Department</label>
+            <select asp-for="DepartmentId" class="form-control" asp-items="@Departments">
+                <option value="@null">No Department</option> <!-- Allow null/empty selection -->
+            </select>
+            <span asp-validation-for="DepartmentId" class="text-danger"></span>
+        </div>
+
+    <div class="form-group">
+        <label asp-for="ImageFile">Upload Image</label>
+        <input asp-for="ImageFile" type="file" class="form-control" />
+        <span asp-validation-for="ImageFile" class="text-danger"></span>
+    </div>
+
+    <div class="mt-4">
+        <button type="submit" class="btn btn-primary me-2">
+            <i class="bi bi-save"></i> Save
+        </button>
+        <a href="@Url.Action("Index")" class="btn btn-secondary">
+            <i class="bi bi-arrow-left"></i> Back to List
+        </a>
+    </div>
+</form>
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<style>
+    .form-label {
+        font-size: 16px;
+    }
+
+    .form-control {
+        font-size: 16px;
+    }
+
+    .btn-primary, .btn-secondary {
+        font-size: 16px;
+        padding: 10px 20px;
+    }
+</style>
+@section Scripts {
+    @{
+
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
