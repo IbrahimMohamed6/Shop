@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using Shop.DAL.Entites.Identity;
+using Shop.PL.Helper;
 using Shop.PL.Models.Identity;
 
 namespace Shop.PL.Controllers
@@ -89,5 +91,84 @@ namespace Shop.PL.Controllers
 		}
 		#endregion
 
-	}
+
+		#region Log Out
+		public async Task<IActionResult> LogOut()
+		{
+			await _signInManager.SignOutAsync();
+			return RedirectToAction(nameof(SignIn));
+		}
+		#endregion
+
+		#region Forget Password
+		[HttpGet]		
+		public IActionResult ForgetPassword()
+		{
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> SendEmail(ForgetPasswordViewModel model)
+		{
+			if (ModelState.IsValid)
+			{
+				var User = await _userManager.FindByEmailAsync(model.Email);
+				if(User is not null)
+				{
+					var Token= await _userManager.GeneratePasswordResetTokenAsync(User);
+					var EmailUrl= Url.Action("ResetPassword","Account",new {Email=model.Email,Token=Token},Request.Scheme);
+					var email = new DAL.Entites.Helper.Email
+                    {
+						To = model.Email,
+						Subject = "Rset Password",
+						Body = EmailUrl
+					};
+					EmailSetting.SendEmail(email);
+					return RedirectToAction(nameof(CheckYorInbox));
+				}
+				
+			}
+			ModelState.AddModelError("", "User Name Not Exist");
+				return View(model);
+		}
+		#endregion
+
+		#region Check Password
+		public IActionResult CheckYorInbox()
+		{
+			return View();
+		}
+		#endregion
+
+		#region Reset Password
+		public IActionResult Resetpassword(string Email,string Token)
+		{
+			return View();
+		}
+		[HttpPost]
+        public async Task<IActionResult> Resetpassword(ResetpasswordViewModel model)
+        {
+			if(ModelState.IsValid)
+			{
+				var User=await _userManager.FindByEmailAsync(model.Email); 
+				if(User is not null)
+				{
+					var ResetPassword = await _userManager.ResetPasswordAsync(User, model.Token, model.Password);
+					if(ResetPassword.Succeeded)
+						return RedirectToAction(nameof(SignIn));
+					foreach (var error in ResetPassword.Errors)
+						ModelState.AddModelError("", error.Description);
+
+				}
+			}
+			ModelState.AddModelError("", "Reset Password Is Valid");
+			return View(model);
+			
+            
+        }
+
+        #endregion
+
+
+
+    }
 }

@@ -1,0 +1,24 @@
+﻿
+@model IdentityRole
+
+@{
+    Layout = "_Layout";
+    ViewData["Title"] = "Details";
+}
+<h2>Application User Details</h2>
+
+<div class="card">
+    <div class="card-body">
+        <h5 class="card-title">Role Information</h5>
+        <dl class="row">
+            <dt class="col-sm-3">Id</dt>
+            <dd class="col-sm-9">@Model.Id</dd>
+
+            <dt class="col-sm-3">Role Name</dt>
+            <dd class="col-sm-9">@Model.Name</dd>
+        </dl>
+    </div>
+</div>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

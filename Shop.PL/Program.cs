@@ -7,9 +7,8 @@ using Shop.BLL.Services.DepartmentServices;
 using Shop.BLL.Services.EmployeeServices;
 using Shop.DAL.Entites.Identity;
 using Shop.DAL.Preasistince.Data.Contexts;
-using Shop.DAL.Preasistince.Repository.DepartmentRepositories;
-using Shop.DAL.Preasistince.Repository.EmployeeRepository;
 using Shop.DAL.Preasistince.UnitOfWork;
+using Shop.PL.MappingProfile;
 
 namespace Shop.PL
 {
@@ -33,6 +32,10 @@ namespace Shop.PL
 
             builder.Services.AddScoped<IDepartmentServices, DepartmentServices>();
             builder.Services.AddScoped<IEmployeeService, EmployeeService>();
+            builder.Services.AddAutoMapper(M => M.AddProfiles(new List<Profile>()
+            {
+                new UserProfile(),new RolesProfile()
+            }));
             builder.Services.AddTransient<IAttachement, Attachement>();
             builder.Services.AddAutoMapper(M=>M.AddProfile(new MappingProfils()));
 			builder.Services.AddIdentity<ApplicationUser, IdentityRole>((Options =>
@@ -47,7 +50,8 @@ namespace Shop.PL
 				Options.Lockout.AllowedForNewUsers = true;
 				Options.Lockout.MaxFailedAccessAttempts = 5;
 				Options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-			})).AddEntityFrameworkStores<ShopDbContext>();
+			})).AddEntityFrameworkStores<ShopDbContext>()
+            .AddDefaultTokenProviders();
 
 
 
@@ -65,12 +69,13 @@ namespace Shop.PL
             app.UseStaticFiles();
 
             app.UseRouting();
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
             app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Account}/{action=SignIn}/{id?}");
+                pattern: "{controller=Home}/{action=Index}/{id?}");
 
             app.Run();
         }

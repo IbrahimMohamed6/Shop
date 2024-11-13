@@ -1,0 +1,42 @@
+﻿
+@model List<UserInRoleViewModel>
+
+@{
+    Layout = "_Layout";
+    var roleId = ViewData["RoleId"] as string;
+    ViewData["Title"] = "AddOrRemoveUsers";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="AddOrRemoveUsers" method="post">
+    <input type="hidden" name="RoleId" value="@ViewData["RoleId"]" />
+    
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>User Name</th>
+                <th>Select</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var user in Model)
+            {
+                <tr>
+                    <td>@user.UserName</td>
+                    <td>
+                        <input type="checkbox" asp-for="@user.IsSelected" />
+                        <input type="hidden" asp-for="@user.UserId" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <button type="submit" class="btn btn-primary">Save Changes</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to Roles</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,9 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop.BLL.Services.DepartmentServices;
 using Shop.BLL.Services.Dtos.Department;
 
 namespace Shop.PL.Controllers
 {
+    [Authorize]
     public class DepartmentController : Controller
     {
         private readonly IDepartmentServices _departmentServices;
@@ -15,12 +17,15 @@ namespace Shop.PL.Controllers
             _departmentServices = departmentServices;
             _logger = logger;
         }
+        #region Index
         public IActionResult Index()
         {
-            var Department=_departmentServices.GetAllDepartment();
+            var Department = _departmentServices.GetAllDepartment();
             return View(Department);
-        }
+        } 
+        #endregion
 
+        #region Details
         public IActionResult Details(int? id)
         {
             try
@@ -31,7 +36,7 @@ namespace Shop.PL.Controllers
                 var Department = _departmentServices.GetDepartmentById(id.Value);
                 if (Department is not null)
                     return View(Department);
-                
+
                 return NotFound();
             }
             catch (Exception ex)
@@ -39,6 +44,10 @@ namespace Shop.PL.Controllers
                 throw new Exception(ex.Message);
             }
         }
+        #endregion
+
+
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -63,6 +72,7 @@ namespace Shop.PL.Controllers
                 _logger.LogError(ex, ex.Message);
                 return View(department);
             }
-        }
+        } 
+        #endregion
     }
 }

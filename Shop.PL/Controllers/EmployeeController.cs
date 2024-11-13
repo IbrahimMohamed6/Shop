@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Shop.BLL.Services.DepartmentServices;
 using Shop.BLL.Services.Dtos.Employee;
 using Shop.BLL.Services.EmployeeServices;
@@ -7,6 +8,7 @@ using Shop.PL.Models;
 
 namespace Shop.PL.Controllers
 {
+    [Authorize]
     public class EmployeeController : Controller
     {
         private readonly IEmployeeService _employeeService;
@@ -21,24 +23,31 @@ namespace Shop.PL.Controllers
             _departmentServices = departmentServices;
             _logger = logger;
         }
+        #region Index
         public IActionResult Index(string search)
         {
-           var Employees= _employeeService.GetEmployee(search);
+            var Employees = _employeeService.GetEmployee(search);
 
             return View(Employees);
         }
+        #endregion
+
+
+        #region Details
 
         public IActionResult Details(int? id)
         {
             ViewData["Departments"] = _departmentServices.GetAllDepartment();
             if (id == null)
                 return BadRequest();
-            var Employee= _employeeService.GetEmployeeById(id);
+            var Employee = _employeeService.GetEmployeeById(id);
             if (Employee == null)
                 return NotFound();
             return View(Employee);
         }
+        #endregion
 
+        #region Edit
         public IActionResult Edit(int? id)
         {
             ViewData["Departments"] = _departmentServices.GetAllDepartment();
@@ -70,20 +79,20 @@ namespace Shop.PL.Controllers
 
         }
         [HttpPost]
-        public IActionResult Edit(int?id,CreateUpdateEmployeeDto employeeDto)
+        public IActionResult Edit(int? id, CreateUpdateEmployeeDto employeeDto)
         {
             try
             {
-                if(employeeDto.Id!=id)
+                if (employeeDto.Id != id)
                     return BadRequest();
                 if (ModelState.IsValid)
                 {
-                   var Result= _employeeService.Update(employeeDto)>0;
-                    if(Result)
+                    var Result = _employeeService.Update(employeeDto) > 0;
+                    if (Result)
                         TempData["SuccessMessage"] = "Employee is Updated";
                     else
                         TempData["ErrorMessage"] = "Something went wrong!";
-                return RedirectToAction("Index");
+                    return RedirectToAction("Index");
 
                 }
                 ModelState.AddModelError("", "Employee Not Updated");
@@ -97,6 +106,10 @@ namespace Shop.PL.Controllers
             }
 
         }
+        #endregion
+
+
+        #region Create
         [HttpGet]
         public IActionResult Create()
         {
@@ -112,8 +125,8 @@ namespace Shop.PL.Controllers
 
                 if (ModelState.IsValid)
                 {
-                    var Result = _employeeService.Creat(employeeDto)>0;
-                    if( Result )
+                    var Result = _employeeService.Creat(employeeDto) > 0;
+                    if (Result)
                         TempData["SuccessMessage"] = "Employee is Created";
                     else
                         TempData["ErrorMessage"] = "Something went wrong!";
@@ -121,19 +134,23 @@ namespace Shop.PL.Controllers
 
                 }
                 else
-                ModelState.AddModelError("", "Employee Not Updated");
-                  TempData["ErrorMessage"] = "Something went wrong!";
-                  return RedirectToAction("Index");
-                
+                    ModelState.AddModelError("", "Employee Not Updated");
+                TempData["ErrorMessage"] = "Something went wrong!";
+                return RedirectToAction("Index");
+
             }
             catch (Exception ex)
             {
-                _logger.LogError (ex, ex.Message);
+                _logger.LogError(ex, ex.Message);
                 return View(employeeDto);
             }
         }
 
-        public IActionResult Delete(int ?id)
+        #endregion
+
+
+        #region Delete
+        public IActionResult Delete(int? id)
         {
             var Message = string.Empty;
             if (id is null)
@@ -149,7 +166,8 @@ namespace Shop.PL.Controllers
 
             return RedirectToAction("Index");
 
-        }
+        } 
+        #endregion
     }
 
 }

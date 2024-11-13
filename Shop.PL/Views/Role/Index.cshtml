@@ -1,0 +1,52 @@
+﻿
+@model IEnumerable<RoleViewModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<a asp-controller="Role" asp-action="Create" class="btn btn-primary">Create New Role</a>
+
+<h2> All Roles </h2>
+<form method="post" action="@Url.Action("Index", "User")">
+    <input type="text" name="SearchInput" placeholder="Search by name or email" />
+    <button type="submit" class="btn btn-primary">Search</button>
+</form>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>RoleName</th>
+            <th>Details</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var Role in Model)
+        {
+            <tr>
+                <td>@Role.Id</td>
+                <td>@Role.RoleName</td>
+                <td>
+                    <!-- Details Button -->
+                    <a asp-action="Details" asp-route-id="@Role.Id" class="btn btn-info">Details</a>
+                </td>
+                <td>
+                    <!-- Update Button -->
+                    <a asp-action="Edit" asp-route-id="@Role.Id" class="btn btn-warning">Update</a>
+                </td>
+                <td>
+                    <!-- Delete Button -->
+                    <form asp-action="Delete" asp-route-id="@Role.Id" method="post" style="display:inline;">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure you want to delete this Role?');">Delete</button>
+                    </form>
+                </td>
+                
+            </tr>
+        }
+    </tbody>
+</table>
+
+

@@ -9,5 +9,6 @@ namespace Shop.DAL.Entites.Identity
 		public string LastName { get; set; } = null!;
 
 		public bool IsAgree { get; set; }
-	}
+        
+    }
 }

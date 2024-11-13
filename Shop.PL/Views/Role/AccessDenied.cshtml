@@ -1,0 +1,60 @@
+﻿@{
+    ViewData["Title"] = "Access Denied";
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRz1Y5C4b3jz7G7GgMRVVo49gzMQQs5PqFjSZSOId" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #343a40;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .access-denied-container {
+            max-width: 600px;
+            padding: 30px;
+            background-color: #ffffff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .access-denied-icon {
+            font-size: 3em;
+            color: #dc3545;
+            margin-bottom: 15px;
+        }
+        .btn-home {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+        }
+        .btn-home:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+
+<div class="access-denied-container">
+    <div class="access-denied-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i> <!-- Bootstrap Icon for a triangle warning -->
+    </div>
+    <h1 class="display-5">Access Denied</h1>
+    <p class="lead">You do not have permission to view this page.</p>
+    <p>If you believe this is a mistake, please contact the administrator for assistance.</p>
+    
+    <a href="@Url.Action("Index", "Home")" class="btn btn-home mt-3">Back to Home</a>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.min.js" integrity="sha384-mQ93FjEY+3fYtHNSi6Yv3t5Plhw/HgfkaBJOZn1HsdmBlB5z3C/jT4PYJ1IIqzWm" crossorigin="anonymous"></script>
+</body>
+</html>
